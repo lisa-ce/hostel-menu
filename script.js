@@ -211,12 +211,15 @@ function createCard(date, index) {
 
 function getCardsToShow() {
   if (window.innerWidth <= 600) {
-    return 1;
+    return 1; // phones
   }
 
-  return 3;
-}
+  if (window.innerWidth <= 1024) {
+    return 2; // tablets
+  }
 
+  return 3; // laptops / PCs
+}
 function renderMenus(startDay = new Date().getDay()) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -256,10 +259,18 @@ const todayDay = new Date().getDay();
 
 buttons.forEach(button => {
   if (Number(button.dataset.day) === todayDay) {
-    button.classList.add("active");
+    button.classList.add("active-day");
   } else {
-    button.classList.remove("active");
+    button.classList.remove("active-day");
   }
 });
 
 renderMenus(todayDay);
+window.addEventListener("resize", () => {
+  const activeButton = document.querySelector(".btnrow button.active-day");
+  const selectedDay = activeButton
+    ? Number(activeButton.dataset.day)
+    : new Date().getDay();
+
+  renderMenus(selectedDay);
+});
